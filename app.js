@@ -7,39 +7,26 @@ bookList.addEventListener("click", delBook)
 const deleteBtn = document.querySelector('#delete-books')
 deleteBtn.addEventListener('click',delBooks)
 
-///// kustuta nupp
-function delBook(event) {
-
-    if (event.target.textContent === 'X') {
-
-        if (confirm('Do you really want to delete this book?')) {
-
-            event.target.parentElement.remove()
-            let book = (event.target.parentElement.textContent.slice(0, -1))
-            removeStorage(book)
-        }
-    }
-
+function deleteRow(book) {
+    var i = book.parentNode.parentNode.rowIndex;
+    document.querySelector('table').deleteRow(i);
+     removeStorage(i);
 }
 
-function removeStorage(book) {
-    let books
-    if(localStorage.getItem('books') === null) {
+function removeStorage(i){
+
+    let books = []
+    if(localStorage.getItem("books") === null) {
         books = []
+    } else {
+        books = JSON.parse(localStorage.getItem("books"))
     }
-    else {
-        books = JSON.parse(localStorage.getItem('books'))
-    }
-    books.forEach(function (taskFromLS, taskIndex){
-        if(taskFromLS === book) {
-            books.splice(taskIndex, 1)
-        }
-    })
+    let myIndex = books.indexOf(i-1);
+    books.splice(myIndex, 1);
+
     localStorage.setItem('books', JSON.stringify(books))
+
 }
-
-
-
 
 function delBooks() {
     while(bookList.firstElementChild) {
@@ -59,6 +46,11 @@ function addBook(event) {
     const title = document.querySelector('#title').value
     const author = document.querySelector('#author').value
     const isbn = document.querySelector('#isbn').value
+    const xxx = "<input type=\"button\" value=\"Delete\" onclick=\"deleteRow(this)\">"
+
+    const tr = document.createElement('tr')
+    tr.innerHTML = "<td>" + title + "</td>" + "<td>" + author + "</td>" + "<td>" + isbn + "</td>" + "<td>" + xxx + "</td>";
+
 
     //get element from document object
     const bookList = document.querySelector('tbody');
@@ -80,11 +72,7 @@ function addBook(event) {
     const z = document.createTextNode(isbn)
     ul.appendChild(z)
 
-    ///////// X button
-    const link = document.createElement('a')
-    link.className = 'del'
-    link.appendChild(document.createTextNode('X'))
-    link.setAttribute('href' , '#')
+
 
     //////////////////
     const ti = document.createElement('tr')
@@ -92,21 +80,14 @@ function addBook(event) {
     const g = document.createTextNode('')
     ti.appendChild(g)
 
-    //ADD LI TO TASK LIST
-    bookList.appendChild(li)
-    bookList.appendChild(op)
-    bookList.appendChild(ul)
-    bookList.appendChild(link)
-    bookList.appendChild(ti)
-    // save task to local storage
-    bookStorage(title)
-    bookStorage(author)
-    bookStorage(isbn)
 
-    //clear form input value
-    document.querySelector('#title').value = ''
-    document.querySelector('#author').value = ''
-    document.querySelector('#isbn').value = ''
+
+    bookList.appendChild(tr)
+
+
+    let book = [title, author, isbn]
+    bookStorage(book)
+
     event.preventDefault()
 
 }
