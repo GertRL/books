@@ -1,6 +1,59 @@
 const form =document.querySelector('form')
 form.addEventListener('submit',addBook)
 
+const bookList = document.querySelector('tbody');
+bookList.addEventListener("click", delBook)
+
+const deleteBtn = document.querySelector('#delete-books')
+deleteBtn.addEventListener('click',delBooks)
+
+///// kustuta nupp
+function delBook(event) {
+
+    if (event.target.textContent === 'X') {
+
+        if (confirm('Do you really want to delete this book?')) {
+
+            event.target.parentElement.remove()
+            let book = (event.target.parentElement.textContent.slice(0, -1))
+            removeStorage(book)
+        }
+    }
+
+}
+
+function removeStorage(book) {
+    let books
+    if(localStorage.getItem('books') === null) {
+        books = []
+    }
+    else {
+        books = JSON.parse(localStorage.getItem('books'))
+    }
+    books.forEach(function (taskFromLS, taskIndex){
+        if(taskFromLS === book) {
+            books.splice(taskIndex, 1)
+        }
+    })
+    localStorage.setItem('books', JSON.stringify(books))
+}
+
+
+
+
+function delBooks() {
+    while(bookList.firstElementChild) {
+        bookList.removeChild(bookList.firstChild)
+    }
+    removeAllStorage()
+}
+
+
+function removeAllStorage() {
+    localStorage.removeItem('books')
+}
+
+
 function addBook(event) {
     // get task value from form input
     const title = document.querySelector('#title').value
@@ -46,12 +99,29 @@ function addBook(event) {
     bookList.appendChild(link)
     bookList.appendChild(ti)
     // save task to local storage
-   // bookStorage(title)
+    bookStorage(title)
+    bookStorage(author)
+    bookStorage(isbn)
 
     //clear form input value
-  //  document.querySelector('#task').value = ''
+    document.querySelector('#title').value = ''
+    document.querySelector('#author').value = ''
+    document.querySelector('#isbn').value = ''
     event.preventDefault()
 
 }
 
+function  bookStorage(book){
+
+    let books
+    if(localStorage.getItem('books') === null) {
+        books = []
+    }
+    else {
+        books = JSON.parse(localStorage.getItem('books'))
+    }
+    books.push(book)
+    localStorage.setItem('books', JSON.stringify(books))
+
+}
 
