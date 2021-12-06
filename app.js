@@ -6,13 +6,13 @@ bookList.addEventListener("click", delBook)
 
 const deleteBtn = document.querySelector('#delete-books')
 deleteBtn.addEventListener('click',delBooks)
-
+////////////////// delete nupp
 function deleteRow(book) {
     var i = book.parentNode.parentNode.rowIndex;
     document.querySelector('table').deleteRow(i);
      removeStorage(i);
 }
-
+///////////////// remove local storage
 function removeStorage(i){
 
     let books = []
@@ -27,7 +27,7 @@ function removeStorage(i){
     localStorage.setItem('books', JSON.stringify(books))
 
 }
-
+//// peaks olema delete all nupp
 function delBooks() {
     while(bookList.firstElementChild) {
         bookList.removeChild(bookList.firstChild)
@@ -35,55 +35,26 @@ function delBooks() {
     removeAllStorage()
 }
 
-
 function removeAllStorage() {
     localStorage.removeItem('books')
 }
 
-
+///// uute raamatute lisamine
 function addBook(event) {
     // get task value from form input
     const title = document.querySelector('#title').value
     const author = document.querySelector('#author').value
     const isbn = document.querySelector('#isbn').value
-    const xxx = "<input type=\"button\" value=\"Delete\" onclick=\"deleteRow(this)\">"
+    const nupp = "<input type=\"button\" value=\"Delete\" onclick=\"deleteRow(this)\">"
 
     const tr = document.createElement('tr')
-    tr.innerHTML = "<td>" + title + "</td>" + "<td>" + author + "</td>" + "<td>" + isbn + "</td>" + "<td>" + xxx + "</td>";
+    tr.innerHTML = "<td>" + title + "</td>" + "<td>" + author + "</td>" + "<td>" + isbn + "</td>" + "<td>" + nupp + "</td>";
 
 
     //get element from document object
     const bookList = document.querySelector('tbody');
-    //////////// Title
-    const li = document.createElement('td')
-    li.className = 'title'
-    const x = document.createTextNode(title)
-    li.appendChild(x)
-
-    //////////////////// Author
-    const op = document.createElement('td')
-    op.className = 'author'
-    const y = document.createTextNode(author)
-    op.appendChild(y)
-
-    //////////////// ISBN
-    const ul = document.createElement('td')
-    ul.className = 'isbn'
-    const z = document.createTextNode(isbn)
-    ul.appendChild(z)
-
-
-
-    //////////////////
-    const ti = document.createElement('tr')
-    ti.className = 'tühi'
-    const g = document.createTextNode('')
-    ti.appendChild(g)
-
-
 
     bookList.appendChild(tr)
-
 
     let book = [title, author, isbn]
     bookStorage(book)
@@ -92,6 +63,7 @@ function addBook(event) {
 
 }
 
+/// raamatute salvestamine local storage
 function  bookStorage(book){
 
     let books
