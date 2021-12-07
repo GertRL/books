@@ -11,7 +11,8 @@ deleteBtn.addEventListener('click',delBooks)
 function deleteRow(book) {
     var i = book.parentNode.parentNode.rowIndex;
     document.querySelector('table').deleteRow(i);
-     removeStorage(i);
+    i = i - 1
+    removeStorage(i);
 }
 //////////
 function delBook(event){
@@ -34,8 +35,15 @@ function removeStorage(i){
     } else {
         books = JSON.parse(localStorage.getItem("books"))
     }
-    let myIndex = books.indexOf(i-1);
-    books.splice(myIndex, 1);
+    books.forEach(function (taskFromLS, taskIndex){
+        console.log(i)
+        if(taskIndex === i) {
+            books.splice(taskIndex, 1)
+        }
+    })
+
+    // let myIndex = books.indexOf(i-1);
+    // books.splice(myIndex, 1);
 
     localStorage.setItem('books', JSON.stringify(books))
 
